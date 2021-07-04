@@ -1,0 +1,45 @@
+﻿@model GerenciaProjeto.Models.Versao
+
+@{
+    ViewData["Title"] = "Deletar";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Você tem certeza que quer deletar? Esta opção não pode ser desfeita.</h3>
+<div>
+    <h4>Versão</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Numero)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Numero)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sistema)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sistema.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nota)
+        </dt>
+        <dd class="col-sm-10">
+            <p style="white-space: pre-wrap">@Html.DisplayFor(model => model.Nota)</p>
+        </dd>
+    </dl>
+    
+    <form asp-action="Deletar">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Deletar" class="btn btn-danger btn-sm" />
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Inicio" asp-route-sistemaId="@Model.Sistema.Id">Voltar à Lista</a>
+    </form>
+</div>

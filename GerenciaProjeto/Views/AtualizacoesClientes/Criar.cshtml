@@ -1,0 +1,93 @@
+﻿@model GerenciaProjeto.Models.AtualizacaoCliente
+
+@{
+    ViewData["Title"] = "Criar";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Atualização Cliente</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Criar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-lg-6">
+                    <label asp-for="EmpresaId" class="control-label"></label>
+                    <select asp-for="EmpresaId" class="form-control" asp-items="ViewBag.EmpresaId">
+                        <option selected disabled>Selecione</option>
+                    </select>
+                    <span asp-validation-for="EmpresaId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-6">
+                    <label asp-for="Data" class="control-label"></label>
+                    <input asp-for="Data" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="Data" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <label asp-for="SistemaId" class="control-label"></label>
+                    <select style="background: #eee; pointer-events: none; touch-action: none" readonly="readonly" tabindex="-1" aria-disabled="true" asp-for="SistemaId" class="form-control" asp-items="ViewBag.SistemaId"></select>
+                    <span asp-validation-for="SistemaId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label asp-for="VersaoAnteriorId" class="control-label"></label>
+                    <select id="selectVersaoAnterior" asp-for="VersaoAnteriorId" class="form-control" asp-items="ViewBag.VersaoAnteriorId">
+                        <option id="selecioneVersaoAnterior" selected>Selecione</option>
+                    </select>
+                    <span asp-validation-for="VersaoAnteriorId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label asp-for="VersaoAtualizadaId" class="control-label"></label>
+                    <select id="selectVersaoAtualizada" asp-for="VersaoAtualizadaId" class="form-control" asp-items="ViewBag.VersaoAtualizadaId">
+                        <option selected>Selecione</option>
+                    </select>
+                    <span asp-validation-for="VersaoAtualizadaId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary btn-sm" />
+                <a class="btn btn-outline-secondary btn-sm" asp-action="Inicio">Voltar à Lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+     $(function() {
+         $("#selectSistema").change(function() {
+                var sistemaId = $(this).val();
+                var versoes_versaoAnterior = $("#selectVersaoAnterior");
+                var versoes_versaoAtualizada = $("#selectVersaoAtualizada");
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.Action("ListaVersoes", "AtualizacoesClientes"))",
+                    data: { "sistemaId": sistemaId},
+                    success: function (data) {
+                        versoes_versaoAnterior.html('');
+                        versoes_versaoAnterior.append($('<option>Selecione</option>').val(null));
+                        versoes_versaoAtualizada.html('');
+                        $.each(data, function (id, option) {
+                            versoes_versaoAnterior.append($('<option></option>').val(option.id).html(option.numero));
+                            versoes_versaoAtualizada.append($('<option></option>').val(option.id).html(option.numero));
+                        });
+                    },
+                    error:function (xhr, ajaxOptions, thrownError){
+                        alert('Houve uma falha.');
+                    }
+                });
+         });
+     });
+
+        $(document).ready(function () {
+            $('#selecioneVersaoAnterior').val(null);
+        });
+
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

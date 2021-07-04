@@ -1,0 +1,98 @@
+﻿@model PaginatedList<GerenciaProjeto.Models.Versao>
+
+@{
+    int tamanhoCampo = 100;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <div class="float-left">
+        <p>
+            <a class="btn btn-primary btn-sm" asp-action="Criar" asp-route-sistemaId="@ViewData["sistemaId"]">Nova Versão</a>
+        </p>
+    </div>
+    <div class="float-right">
+        <div class="form-inline my-2 my-lg-0">
+            <input id="pesquisa" name="pesquisa" value="@ViewData["pesquisa"]" class="form-control mr-sm-2" type="text" placeholder="Pesquisar" />
+            <input id="click" class="btn btn-secondary my-2 my-sm-0" type="button" value="Pesquisar" />
+            <a class="btn btn-secondary my-2 my-sm-0" style="margin-left: 5px" asp-action="Inicio" asp-route-sistemaId="@ViewData["sistemaId"]">Voltar à Lista Completa</a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Nota)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-light">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Data)
+                </td>
+                <td>
+                    @if (String.IsNullOrEmpty(item.Nota) || item.Nota.Length < tamanhoCampo)
+                    {
+                        @Html.DisplayFor(modelItem => item.Nota)
+                    } else
+                    {
+                        var result = $"{item.Nota.Substring(0, tamanhoCampo)}...";
+                        @result
+                    }
+                </td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@item.Id" asp-route-sistemaId="@ViewData["sistemaId"]">Editar</a> |
+                    <a asp-action="Visualizar" asp-route-id="@item.Id">Visualizar</a> |
+                    <a asp-action="Deletar" asp-route-id="@item.Id">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Inicio"
+   asp-route-numeroPagina="@(Model.PageIndex - 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   class="btn btn-secondary my-2 my-sm-0 @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Inicio"
+   asp-route-numeroPagina="@(Model.PageIndex + 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   class="btn btn-secondary my-2 my-sm-0 @nextDisabled">
+    Próxima
+</a>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#click').click(function (e) {
+                var sistemaId = @ViewData["sistemaId"];
+                var pesquisa = $("#pesquisa").val();
+                var url = '@Url.Action("Inicio", "Versoes")' + '?sistemaId=' + sistemaId + "&pesquisa=" + pesquisa;
+                window.location.href = url;
+            });
+        });
+    </script>
+}

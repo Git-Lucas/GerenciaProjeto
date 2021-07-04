@@ -1,4 +1,4 @@
-﻿using GerenciaProjeto.Models;
+﻿using GerenciaProjeto.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,14 +11,14 @@ namespace GerenciaProjeto.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(/*ILogger<HomeController> logger*/)
         {
-            _logger = logger;
+            //_logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Inicio()
         {
             return View();
         }

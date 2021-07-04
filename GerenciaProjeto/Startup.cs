@@ -1,6 +1,10 @@
+using GerenciaProjeto.Data;
+using GerenciaProjeto.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +17,7 @@ namespace GerenciaProjeto
 {
     public class Startup
     {
+        private string _connection = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,7 +28,21 @@ namespace GerenciaProjeto
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            SqlConnectionStringBuilder builder = new(Configuration.GetConnectionString("DefaultConnection"))
+            {
+                Password = Configuration["DbPassword"]
+            };
+            _connection = builder.ConnectionString;
+
+            services.AddDbContext<GerenciaProjetoContext>(options => options.UseSqlServer(_connection));
             services.AddControllersWithViews();
+
+            services.AddScoped<TarefaEmpresaService>();
+            services.AddScoped<EmpresaService>();
+            services.AddScoped<TarefaClienteService>();
+            services.AddScoped<SistemaService>();
+            services.AddScoped<VersaoService>();
+            services.AddScoped<AtualizacaoClienteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +68,7 @@ namespace GerenciaProjeto
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Inicio}/{id?}");
             });
         }
     }

@@ -1,0 +1,105 @@
+﻿@model PaginatedList<GerenciaProjeto.Models.AtualizacaoCliente>
+
+@{
+    ViewData["Title"] = "Atualizações Clientes";
+}
+
+<div>
+    <div class="float-left">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="float-right">
+        <p>
+            <a class="btn btn-outline-secondary" asp-action="TodasAtualizacoes">Todas as Atualizações</a>
+        </p>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<ul class="nav nav-tabs">
+    @foreach (Sistema sistema in ViewBag.sistemas)
+    {
+        string classe = sistema.Id == 1 ? "nav-link active" : "nav-link";
+        <li class="nav-item">
+            <a class="@classe" data-toggle="tab" href="#@sistema.Nome">@sistema.Nome</a>
+        </li>
+    }
+</ul>
+
+<div class="tab-content">
+    @foreach (Sistema sistema in ViewBag.sistemas)
+    {
+        string exibir = sistema.Id == 1 ? "active show" : "";
+        <div id="@sistema.Nome" class="tab-pane fade @exibir">
+            <br />
+            <p>
+                <a class="btn btn-primary btn-sm" asp-action="Criar" asp-route-sistemaId="@sistema.Id">Nova Atualização</a>
+            </p>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().Empresa)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().VersaoAnterior)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().VersaoAtualizada)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().Data)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(a => a.Sistema == sistema))
+                    {
+                        <tr class="table-danger">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Empresa.Nome)
+                            </td>
+                            <td>
+                                <a asp-controller="Versoes" asp-action="Visualizar" asp-route-id="@item.VersaoAnteriorId">@Html.DisplayFor(modelItem => item.VersaoAnterior.Numero)</a>
+                            </td>
+                            <td>
+                                <a asp-controller="Versoes" asp-action="Visualizar" asp-route-id="@item.VersaoAtualizadaId">@Html.DisplayFor(modelItem => item.VersaoAtualizada.Numero)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Data)
+                            </td>
+                            <td>
+                                <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |
+                                <a asp-action="Visualizar" asp-route-id="@item.Id">Visualizar</a> |
+                                <a asp-action="Deletar" asp-route-id="@item.Id">Deletar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Inicio"
+   asp-route-numeroPagina="@(Model.PageIndex - 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   class="btn btn-secondary my-2 my-sm-0 @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Inicio"
+   asp-route-numeroPagina="@(Model.PageIndex + 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   class="btn btn-secondary my-2 my-sm-0 @nextDisabled">
+    Próxima
+</a>

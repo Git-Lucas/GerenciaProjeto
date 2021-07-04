@@ -1,0 +1,133 @@
+﻿@model PaginatedList<GerenciaProjeto.Models.TarefaCliente>
+
+@{
+    ViewData["Title"] = "Tarefas Cliente (Todas as Tarefas)";
+    int tamanhoCampos = 15;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <div class="float-left" style="vertical-align: top">
+        <p>
+            <a class="btn btn-primary btn-sm" asp-action="Criar">Nova Tarefa</a>
+            <a class="btn btn-primary btn-sm" asp-action="Inicio">Visualizar Tarefas Pendentes</a>
+        </p>
+    </div>
+    <div class="float-right">
+        <form asp-action="TodasTarefas" method="get" class="form-inline my-2 my-lg-0">
+            <input name="pesquisa" value="@ViewData["pesquisa"]" class="form-control mr-sm-2" type="text" placeholder="Pesquisar" />
+            <input class="btn btn-secondary my-2 my-sm-0" type="submit" value="Pesquisar" />
+            <a class="btn btn-secondary my-2 my-sm-0" style="margin-left: 5px" asp-action="TodasTarefas">Voltar à Lista Completa</a>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Funcionario)
+            </th>
+            <th>
+                <a style="color: #ffffff" asp-action="TodasTarefas" asp-route-ordenarPor="empresa">
+                    @Html.DisplayNameFor(model => model.First().Empresa) &#9662;
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Erro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Motivo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Solucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DataInicial)
+            </th>
+            <th>
+                <a style="color: #ffffff" asp-action="TodasTarefas" asp-route-ordenarPor="dataFinal">
+                    @Html.DisplayNameFor(model => model.First().DataFinal) &#9662;
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        string classtr = item.Status == GerenciaProjeto.Models.Enums.Status.Pendente ? "table-danger" : "table-info";
+        <tr class=@classtr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcionario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Nome)
+            </td>
+            <td>
+                @if (String.IsNullOrEmpty(item.Erro) || item.Erro.Length < tamanhoCampos)
+                {
+                    @item.Erro
+                } else
+                {
+                    var result = $"{item.Erro.Substring(0, tamanhoCampos)}...";
+                    @result
+                }
+            </td>
+            <td>
+                @if (String.IsNullOrEmpty(item.Motivo) || item.Motivo.Length < tamanhoCampos)
+                {
+                    @item.Motivo
+                } else
+                {
+                    var result = $"{item.Motivo.Substring(0, tamanhoCampos)}...";
+                    @result
+                }
+            </td>
+            <td>
+                @if (String.IsNullOrEmpty(item.Solucao) || item.Solucao.Length < tamanhoCampos)
+                {
+                    @item.Solucao
+                } else
+                {
+                    var result = $"{item.Solucao.Substring(0, tamanhoCampos)}...";
+                    @result
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataInicial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFinal)
+            </td>
+
+            <td>
+                <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Visualizar" asp-route-id="@item.Id">Visualizar</a> |
+                <a asp-action="Deletar" asp-route-id="@item.Id">Deletar</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="TodasTarefas"
+   asp-route-numeroPagina="@(Model.PageIndex - 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   asp-route-ordenarPor="@ViewData["ordenarPor"]"
+   class="btn btn-secondary my-2 my-sm-0 @prevDisabled">
+    Anterior
+</a>
+<a asp-action="TodasTarefas"
+   asp-route-numeroPagina="@(Model.PageIndex + 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   asp-route-ordenarPor="@ViewData["ordenarPor"]"
+   class="btn btn-secondary my-2 my-sm-0 @nextDisabled">
+    Próxima
+</a>

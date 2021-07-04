@@ -1,0 +1,59 @@
+﻿@model GerenciaProjeto.Models.ViewModels.EmpresaFormViewModel;
+
+@{
+    ViewData["Title"] = "Visualizar";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Empresa</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Empresa.Cnpj)
+        </dt>
+        <dd id="cnpj" class="col-sm-10">
+            @Html.DisplayFor(model => model.Empresa.Cnpj)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Empresa.Nome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Empresa.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Empresa.Telefone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Empresa.Telefone)
+        </dd>
+        @if (Model.Sistemas.Any())
+        {
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sistemas)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var sistema in Model.Sistemas)
+            {
+                string teste = "";
+                teste += $"{sistema.Nome}";
+                @teste
+                <br />
+            }
+        </dd>
+        }
+    </dl>
+</div>
+<div>
+    <a class="btn btn-primary btn-sm" asp-action="Editar" asp-route-id="@Model.Empresa.Id">Editar</a>
+    <a class="btn btn-outline-secondary btn-sm" asp-action="Inicio">Voltar à Lista</a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#cnpj').mask('00.000.000/0000-00');
+        });
+    </script>
+}

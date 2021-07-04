@@ -1,0 +1,55 @@
+﻿@model GerenciaProjeto.Models.ViewModels.EmpresaFormViewModel
+
+@{
+    ViewData["Title"] = "Criar";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Empresa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Criar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Empresa.Cnpj" class="control-label"></label>
+                <input id="txtCNPJ" asp-for="Empresa.Cnpj" class="form-control" />
+                <span asp-validation-for="Empresa.Cnpj" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Empresa.Nome" class="control-label"></label>
+                <input asp-for="Empresa.Nome" class="form-control" />
+                <span asp-validation-for="Empresa.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Empresa.Telefone" class="control-label"></label>
+                <input asp-for="Empresa.Telefone" class="form-control" />
+                <span asp-validation-for="Empresa.Telefone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Empresa.Sistemas" class="control-label"></label>
+                <select asp-for="Empresa.Sistemas" id="sistemas" name="sistemas" multiple asp-items="@(new SelectList(Model.Sistemas, nameof(GerenciaProjeto.Models.Sistema.Id), nameof(GerenciaProjeto.Models.Sistema.Nome)))" class="form-control"></select>
+                <span asp-validation-for="Empresa.Sistemas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary btn-sm" />
+                <a class="btn btn-outline-secondary btn-sm" asp-action="Inicio">Voltar à Lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#txtCNPJ').mask('00.000.000/0000-00', { placeholder: "00.000.000/0000-00" });
+        });
+
+        $(document).ready(function () {
+            $('#sistemas').selectpicker();
+        });
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

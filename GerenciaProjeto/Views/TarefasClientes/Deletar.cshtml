@@ -1,0 +1,63 @@
+﻿@model GerenciaProjeto.Models.TarefaCliente
+
+@{
+    ViewData["Title"] = "Deletar";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Você tem certeza que quer deletar? Esta opção não pode ser desfeita.</h3>
+<div>
+    <h4>Tarefa Cliente</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Funcionario) (@Html.DisplayNameFor(model => model.Empresa))
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Funcionario) (@Html.DisplayFor(model => model.Empresa.Nome))
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Erro)
+        </dt>
+        <dd class="col-sm-10">
+            <p style="white-space: pre-wrap">@Html.DisplayFor(model => model.Erro)</p>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Motivo)
+        </dt>
+        <dd class="col-sm-10">
+            <p style="white-space: pre-wrap">@Html.DisplayFor(model => model.Motivo)</p>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Solucao)
+        </dt>
+        <dd class="col-sm-10">
+            <p style="white-space: pre-wrap">@Html.DisplayFor(model => model.Solucao)</p>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DataInicial)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataInicial)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DataFinal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataFinal)
+        </dd>
+    </dl>
+    
+    <form asp-action="Deletar">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Deletar" class="btn btn-danger btn-sm" />
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Inicio">Voltar à Lista</a>
+    </form>
+</div>

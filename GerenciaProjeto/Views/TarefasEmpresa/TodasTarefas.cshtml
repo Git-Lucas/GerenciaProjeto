@@ -1,0 +1,101 @@
+﻿@model PaginatedList<GerenciaProjeto.Models.TarefaEmpresa>
+
+@{
+    ViewData["Title"] = "Tarefas Empresa (Todas as Tarefas)";
+    int tamanhoCampos = 40;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <div class="float-left" style="vertical-align: top">
+        <p>
+            <a class="btn btn-primary btn-sm" asp-action="Criar">Nova Tarefa</a>
+            <a class="btn btn-primary btn-sm" asp-action="Inicio">Visualizar Tarefas Pendentes</a>
+        </p>
+    </div>
+    <div class="float-right">
+        <form asp-action="TodasTarefas" method="get" class="form-inline my-2 my-lg-0">
+            <input name="pesquisa" value="@ViewData["pesquisa"]" class="form-control mr-sm-2" type="text" placeholder="Pesquisar" />
+            <input class="btn btn-secondary my-2 my-sm-0" type="submit" value="Pesquisar" />
+            <a class="btn btn-secondary my-2 my-sm-0" style="margin-left: 5px" asp-action="TodasTarefas">Voltar à Lista Completa</a>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Acao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Observacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DataInicial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DataFinal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        string classtr = item.Status == GerenciaProjeto.Models.Enums.Status.Pendente ? "table-danger" : "table-info";
+        <tr class=@classtr>
+            <td>
+                @if (item.Acao.Length < tamanhoCampos)
+                {
+                    @item.Acao
+                } else
+                {
+                    var result = $"{item.Acao.Substring(0, tamanhoCampos)}...";
+                    @result
+                }
+            </td>
+            <td>
+                @if (String.IsNullOrEmpty(item.Observacao) || item.Observacao.Length < tamanhoCampos)
+                {
+                    @item.Observacao
+                } else
+                {
+                    var result = $"{item.Observacao.Substring(0, tamanhoCampos)}...";
+                    @result
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataInicial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFinal)
+            </td>
+            <td>
+                <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Visualizar" asp-route-id="@item.Id">Visualizar</a> |
+                <a asp-action="Deletar" asp-route-id="@item.Id">Deletar</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="TodasTarefas"
+   asp-route-numeroPagina="@(Model.PageIndex - 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   class="btn btn-secondary my-2 my-sm-0 @prevDisabled">
+    Anterior
+</a>
+<a asp-action="TodasTarefas"
+   asp-route-numeroPagina="@(Model.PageIndex + 1)"
+   asp-route-pesquisa="@ViewData["pesquisa"]"
+   class="btn btn-secondary my-2 my-sm-0 @nextDisabled">
+    Próxima
+</a>
