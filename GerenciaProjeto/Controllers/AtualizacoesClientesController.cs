@@ -174,7 +174,7 @@ namespace GerenciaProjeto.Controllers
         public async Task<IActionResult> TodasAtualizacoes(int? numeroPagina, string ordenarPor)
         {
             int _numeroPagina = numeroPagina ?? 1;
-            ViewData["ordenarPor"] = String.IsNullOrEmpty(ordenarPor) ? "empresa" : "";
+            ViewData["ordenarPor"] = ordenarPor;
 
             ViewData["sistemas"] = await _context.Sistema.OrderBy(s => s.Nome).ToListAsync();
             return View(await PaginatedList<AtualizacaoCliente>.CreateAsync(_atualizacaoClienteService.ListaAtualizacoes(ordenarPor), _numeroPagina));

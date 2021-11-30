@@ -23,15 +23,21 @@ namespace GerenciaProjeto.Services
                          select a;
 
             result = result.Where(a => a.Empresa.Sistemas.Contains(a.Sistema));
+
+            //Traz apenas a última Atualização de cada Sistema em cada Cliente
+            result = result.Where(a => a.Empresa.AtualizacoesCliente.Where(aEmpresa => aEmpresa.Sistema == a.Sistema)
+                                                                    .OrderByDescending(aEmpresa => aEmpresa.Data).First() == a);
+
+            //Verifica se esta última atualização está atualizada ou não
             result = result.Where(a => a.VersaoAtualizada != a.Sistema.Versoes.OrderByDescending(v => v.Data).First());
 
-            return result
-                .Include(a => a.Empresa)
-                .Include(a => a.Sistema)
-                .Include(a => a.Sistema.Versoes)
-                .Include(a => a.VersaoAnterior)
-                .Include(a => a.VersaoAtualizada)
-                .OrderByDescending(a => a.Data);
+            return result.Include(a => a.Empresa)
+                         .ThenInclude(e => e.AtualizacoesCliente)
+                         .Include(a => a.Sistema)
+                         .Include(a => a.Sistema.Versoes)
+                         .Include(a => a.VersaoAnterior)
+                         .Include(a => a.VersaoAtualizada)
+                         .OrderByDescending(a => a.Data);
         }
 
         public IQueryable<AtualizacaoCliente> ListaAtualizacoes(string ordenarPor)

@@ -27,7 +27,7 @@
     <thead>
         <tr>
             <th>
-                <a style="color: #ffffff" asp-action="TodasAtualizacoes" asp-route-ordenarPor="@ViewBag.ordenarPor">
+                <a style="color: #ffffff" asp-action="TodasAtualizacoes" asp-route-ordenarPor="empresa">
                     @Html.DisplayNameFor(model => model.First().Empresa) &#9662;
                 </a>
             </th>
@@ -81,15 +81,15 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Inicio"
+<a asp-action="TodasAtualizacoes"
    asp-route-numeroPagina="@(Model.PageIndex - 1)"
-   asp-route-ordenarPor="@ViewBag.ordenarPor"
+   asp-route-ordenarPor="@ViewData["ordenarPor"]"
    class="btn btn-secondary my-2 my-sm-0 @prevDisabled">
     Anterior
 </a>
-<a asp-action="Inicio"
+<a asp-action="TodasAtualizacoes"
    asp-route-numeroPagina="@(Model.PageIndex + 1)"
-   asp-route-ordenarPor="@ViewBag.ordenarPor"
+   asp-route-ordenarPor="@ViewData["ordenarPor"]"
    class="btn btn-secondary my-2 my-sm-0 @nextDisabled">
     Próxima
 </a>

@@ -2,22 +2,16 @@ using GerenciaProjeto.Data;
 using GerenciaProjeto.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GerenciaProjeto
 {
     public class Startup
     {
-        private string _connection = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,13 +22,7 @@ namespace GerenciaProjeto
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            SqlConnectionStringBuilder builder = new(Configuration.GetConnectionString("DefaultConnection"))
-            {
-                Password = Configuration["DbPassword"]
-            };
-            _connection = builder.ConnectionString;
-
-            services.AddDbContext<GerenciaProjetoContext>(options => options.UseSqlServer(_connection));
+            services.AddDbContext<GerenciaProjetoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
 
             services.AddScoped<TarefaEmpresaService>();

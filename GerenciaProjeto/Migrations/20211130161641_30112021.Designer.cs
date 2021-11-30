@@ -4,14 +4,16 @@ using GerenciaProjeto.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciaProjeto.Migrations
 {
     [DbContext(typeof(GerenciaProjetoContext))]
-    partial class GerenciaProjetoContextModelSnapshot : ModelSnapshot
+    [Migration("20211130161641_30112021")]
+    partial class _30112021
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
