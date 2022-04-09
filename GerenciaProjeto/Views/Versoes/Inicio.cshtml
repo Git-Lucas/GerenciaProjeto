@@ -1,7 +1,7 @@
-﻿@model PaginatedList<GerenciaProjeto.Models.Versao>
+﻿@model GerenciaProjeto.Models.ViewModels.VersaoViewModel;
 
 @{
-    int tamanhoCampo = 85;
+    int tamanhoCampo = 60;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -25,19 +25,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.First().Numero)
+                @Html.DisplayNameFor(model => model.Versoes.First().Numero)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Data)
+                @Html.DisplayNameFor(model => model.Versoes.First().Data)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Nota)
+                Nº de Empresas Instalada
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Versoes.First().Nota)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Versoes)
         {
             <tr class="table-light">
                 <td>
@@ -47,10 +50,14 @@
                     @Html.DisplayFor(modelItem => item.Data)
                 </td>
                 <td>
+                    @Model.AtualizacoesClientes.Where(a => a.VersaoAtualizadaId == item.Id).Count()
+                </td>
+                <td>
                     @if (String.IsNullOrEmpty(item.Nota) || item.Nota.Length < tamanhoCampo)
                     {
                         @Html.DisplayFor(modelItem => item.Nota)
-                    } else
+                    }
+                    else
                     {
                         var result = $"{item.Nota.Substring(0, tamanhoCampo)}...";
                         @result
@@ -66,7 +73,7 @@
     </tbody>
 </table>
 
-@{
+@*@{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
@@ -82,7 +89,7 @@
    asp-route-pesquisa="@ViewData["pesquisa"]"
    class="btn btn-secondary my-2 my-sm-0 @nextDisabled">
     Próxima
-</a>
+</a>*@
 
 @section Scripts {
     <script>

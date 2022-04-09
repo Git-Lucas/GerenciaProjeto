@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GerenciaProjeto.Data;
 using GerenciaProjeto.Models;
 using GerenciaProjeto.Services;
+using GerenciaProjeto.Models.ViewModels;
 
 namespace GerenciaProjeto.Controllers
 {
@@ -31,7 +32,16 @@ namespace GerenciaProjeto.Controllers
             ViewData["Title"] = $"Versões {sistema.Nome}";
             ViewData["sistemaId"] = sistemaId;
 
-            return View(await PaginatedList<Versao>.CreateAsync(_versaoService.ListaVersoes(sistemaId, pesquisa), _numeroPagina));
+            var result = from a in _context.AtualizacaoCliente
+                         select a;
+            ViewData["AtualizacoesClientes"] = result;
+
+            VersaoViewModel viewModel = new()
+            {
+                Versoes = await _versaoService.ListaVersoes(sistemaId, pesquisa).ToListAsync(),
+                AtualizacoesClientes = await _context.AtualizacaoCliente.ToListAsync()
+            };
+            return View(viewModel);
         }
 
         // GET: Versoes/Visualizar/5
